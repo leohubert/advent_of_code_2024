@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx ts-node-esm ./day$(date +%d)/questions-1.ts"
+    "start": "npx ts-node ./day$(date +%d)/questions-1.ts"
   },
   "author": "",
   "license": "ISC",
