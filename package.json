@@ -1,0 +1,22 @@
+{
+  "name": "advent_of_code",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx ts-node-esm ./day$(date +%d)/questions-1.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@turf/turf": "^6.5.0",
+    "@types/lodash": "^4.14.202",
+    "javascript-astar": "^0.4.1",
+    "lodash": "^4.17.21",
+    "mathjs": "^12.1.0",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.2"
+  }
+}
