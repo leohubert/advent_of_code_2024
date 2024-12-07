@@ -84,7 +84,7 @@ async function run(file: string) {
         }
         newMap[y][x] = '#';
         let res = resolvePuzzle(newMap);
-        console.log(res.finished)
+        // console.log(res.finished)
         if (!res.finished) {
             total++;
         }
