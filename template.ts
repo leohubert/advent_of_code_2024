@@ -9,4 +9,4 @@ async function run(file: string) {
 }
 
 run('input-test.txt').catch(console.error);
-run('input.txt').catch(console.error);
+// run('input.txt').catch(console.error);
