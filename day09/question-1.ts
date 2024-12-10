@@ -10,16 +10,16 @@ async function run(file: string) {
     const maxId = line.length / 2;
 
     let id = 0;
-    let lastNumberId = maxId;
+    let lastNumberId = Math.floor(maxId);
 
     let total = 0;
     let index = 0;
-    let reverseIndex = line.length - 1;
+    let reverseIndex = 0;
     let calculIndex = 0;
 
     let queueNumber: { id: number, count: number } | null = null;
 
-    while (id < lastNumberId) {
+    while (id <= lastNumberId) {
         const number = line[index];
         const spaces = line[index + 1];
 
@@ -47,10 +47,21 @@ async function run(file: string) {
         id++;
     }
 
+    if (queueNumber) {
+        for (let i = 0; i < queueNumber.count; i++) {
+            total += queueNumber.id * calculIndex;
+            calculIndex++;
+            process.stdout.write(`${queueNumber.id}`);
+        }
+    }
+
     process.stdout.write(`\n`);
+    console.log('0099811188827773336446555566')
+
+    console.log(`Total: ${total}`);
 
 
 }
 
-run('input-test.txt').catch(console.error);
-// run('input.txt').catch(console.error);
+// run('input-test.txt').catch(console.error);
+run('input.txt').catch(console.error);
