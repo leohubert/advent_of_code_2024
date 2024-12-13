@@ -10,7 +10,7 @@ type Position = {
 const passedPositions: Record<string, boolean> = {};
 let positions: Position[] = [];
 
-function countLetterGroups(map: string[][], letter: string, x: number, y: number, fromPosition?: Position): {
+function countLetterGroups(map: string[][], letter: string, x: number, y: number): {
     count: number
 } {
 
@@ -40,11 +40,10 @@ function countLetterGroups(map: string[][], letter: string, x: number, y: number
 
     count++;
 
-    let current = {x, y};
-    const top = countLetterGroups(map, letter, x, y - 1, current);
-    const right = countLetterGroups(map, letter, x + 1, y, current);
-    const bottom = countLetterGroups(map, letter, x, y + 1, current);
-    const left = countLetterGroups(map, letter, x - 1, y, current);
+    const top = countLetterGroups(map, letter, x, y - 1);
+    const right = countLetterGroups(map, letter, x + 1, y);
+    const bottom = countLetterGroups(map, letter, x, y + 1);
+    const left = countLetterGroups(map, letter, x - 1, y);
 
 
     return {
