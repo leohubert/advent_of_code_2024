@@ -5,6 +5,7 @@
     "files": true,
   },
   "compilerOptions": {
+    "module": "NodeNext",
     "moduleResolution": "nodenext"
   }
 }

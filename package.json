@@ -9,8 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@evilkiwi/astar": "^3.3.1",
     "@turf/turf": "^7.1.0",
-    "fast-astar": "^1.0.6",
+    "astarjs": "^1.1.0",
     "lodash": "^4.17.21",
     "mathjs": "^14.0.1",
     "ts-node": "^10.9.2"
