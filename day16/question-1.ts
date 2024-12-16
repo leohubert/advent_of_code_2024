@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import {cloneDeep, keyBy} from "lodash";
+import {Astar, Grid} from "fast-astar";
 
 type Position = {
     x: number;
@@ -21,6 +22,7 @@ async function displayMap(map: string[][], paths: Position[]) {
 
     console.clear();
     console.log(newMap.map(line => line.join('')).join('\n'));
+    console.log('Lower price: ', lowestPrice);
 }
 
 function countStepsPrice(paths: Position[]) {
@@ -51,6 +53,7 @@ function countStepsPrice(paths: Position[]) {
 }
 
 let lastShow: Date
+let lowestPrice = Infinity;
 async function findLowestPricePath(lines: string[][], map: Position[], position: Position, start: Position, end: Position, paths: Position[] = [], visitedPosition: Record<string, boolean> = {}) {
     const pathByPosition = keyBy(map, (path: Position) => `${path.x}-${path.y}`);
 
@@ -61,9 +64,14 @@ async function findLowestPricePath(lines: string[][], map: Position[], position:
 
     if (position.x === end.x && position.y === end.y) {
         console.log('end', countStepsPrice([...paths, position]))
+        const price = countStepsPrice([...paths, position]);
+        if (price < lowestPrice) {
+            lowestPrice = price;
+        }
+
         return {
             paths: [...paths, position],
-            price: countStepsPrice([...paths, position])
+            price: price
         };
     }
 
@@ -74,8 +82,23 @@ async function findLowestPricePath(lines: string[][], map: Position[], position:
         };
     }
 
+    if (!await findPathToTheEnd(lines, position, start, end, paths)) {
+        return {
+            paths: paths,
+            price: Infinity
+        };
+    }
+
     visitedPosition[`${position.x}-${position.y}`] = true;
     paths.push(position);
+
+    const currentPathPrice = countStepsPrice(paths);
+    if (currentPathPrice > lowestPrice) {
+        return {
+            paths: paths,
+            price: Infinity
+        };
+    }
 
     if (!lastShow || (new Date().getTime() - lastShow.getTime()) > 1000) {
         lastShow = new Date();
@@ -130,6 +153,42 @@ async function findLowestPricePath(lines: string[][], map: Position[], position:
 
 }
 
+async function findPathToTheEnd(lines: string[][], position: Position, start: Position, end: Position, paths: Position[] = []) {
+    const grid = new Grid({
+        col: lines[0].length, // col
+        row: lines.length, // row
+    });
+
+    const pathByPosition = keyBy(paths, (path: Position) => `${path.x}-${path.y}`);
+
+    for (let y = 0; y < lines.length; y++) {
+        for (let x = 0; x < lines[y].length; x++) {
+            if (lines[y][x] === '#') {
+                grid.set([x, y],'value',1);
+            } else if (pathByPosition[`${x}-${y}`]) {
+                grid.set([x, y],'value',1);
+            }
+        }
+    }
+
+    // Pass the grid as a parameter to the Astar object
+    let astar = new Astar(grid),
+        newPath = astar.search(
+            [position.x, position.y], // start
+            [end.x, end.y], // end
+            {                        // option
+                rightAngle:false,    // default:false,Allow diagonal
+                optimalResult:false   // default:true,In a few cases, the speed is slightly slower
+            }
+        )!;
+
+    if (!newPath || newPath.length === 0) {
+        return false
+    }
+
+    return true;
+}
+
 async function run(file: string) {
     const input = fs.readFileSync(path.join(__dirname, file)).toString();
 
@@ -158,13 +217,14 @@ async function run(file: string) {
 
     const pathPositions = await findLowestPricePath(lines, map, {x: startPosition.x - 1, y: startPosition.y}, startPosition, endPosition);
 
-
     const price = countStepsPrice(pathPositions.paths);
 
-    console.log(price - 2);
+    await displayMap(lines, pathPositions.paths);
+
+    console.log("Lowest price", price - 2);
 
 
 }
 
-// run('input-test.txt').catch(console.error);
-run('input.txt').catch(console.error);
+run('input-test.txt').catch(console.error);
+// run('input.txt').catch(console.error);
