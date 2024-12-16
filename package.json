@@ -10,12 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "@turf/turf": "^7.1.0",
-    "javascript-astar": "^0.4.1",
+    "fast-astar": "^1.0.6",
     "lodash": "^4.17.21",
     "mathjs": "^14.0.1",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@types/fast-astar": "^1.0.3",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20.10.2"
   }
